@@ -496,6 +496,15 @@ if __name__ == "__main__":
     if os.path.exists(db_path):
         from analyze_economic import run_economic_analysis
         run_economic_analysis(e0202_result=e0202)
+
+        # ── Additional visualizations (Charts 13–18) ───────────────────────
+        from analyze_visualizations import run_extended_visualizations
+        # Pass province-level records for bubble chart
+        e0201_records   = to_table(load_jsonstat(
+            os.path.join(os.path.dirname(__file__), "E02.01.json")))
+        e030307_records = to_table(load_jsonstat(
+            os.path.join(os.path.dirname(__file__), "E02.03-07.json")))
+        run_extended_visualizations(e0202, e0201_records, e030307_records)
     else:
         print("\n[SKIP] extracted_database.json not found – run: "
               "curl -L -o all_data_gso.json.zip <url> && unzip all_data_gso.json.zip")

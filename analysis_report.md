@@ -109,6 +109,74 @@
 
 ---
 
+## Additional Visualizations (Charts 13–18)
+
+### 11. Annotated GDP Growth Timeline (`13_gdp_growth_annotated.png`)
+
+- Real GDP growth rate (2005–2024) annotated with key historical events
+- **WTO Accession (2007):** Growth held strong at 7.1% despite global headwinds
+- **Global Financial Crisis (2008–2009):** Growth dipped to 5.7% then 5.4% — relatively resilient vs. peers
+- **Monetary Tightening (2011):** Growth fell to 6.2% as the State Bank raised rates to combat 18%+ inflation
+- **COVID-19 (2020):** Slowed to **2.9%** — still positive, one of few economies to grow that year
+- **Delta Variant (2021):** Further drop to **2.6%** as severe lockdowns halted manufacturing
+- **Strong Recovery (2022): 8.5%** — fastest growth in 12 years
+- Note: A base-year break between 2009 and 2010 (1994→2010 constant prices) is marked; growth figures within each sub-period are internally consistent
+
+### 12. Export Commodity Structure (`14_export_structure.png`)
+
+- **Electronics & Electrical Equipment (HS85): $72B (18%)** — single largest category, driven by Samsung, LG
+- **Machinery & Transport (HS84T86): $52B (13%)** — industrial machinery, computers, vehicles
+- **Apparel & Textiles (HS61-63): $37B (9%)** — garment industry remains a major employer
+- **Footwear (HS64): $23B (6%)** — Vietnam is the world's 3rd largest footwear exporter
+- **Wood & Wood Products (HS44): $16B (4%)** — furniture and timber processing
+- **Other / unclassified: ~$114B** — significant unreported or aggregated categories
+- The stacked bar shows rapid absolute growth in electronics since 2015, outpacing all other categories
+
+### 13. Labor Market Gender Comparison (`15_labor_gender.png`)
+
+- **Female/Male labor force ratio: 88%** (2024) — high female participation by regional standards
+- Male labor force: 28.0M, Female: 24.7M — steady since 2012
+- Female unemployment rate is slightly higher than male across all quarters measured
+- **Gender wage gap: Males earn ~8–12% more** per available data period (2011–2023-Q1)
+- Gap is relatively narrow compared to regional peers but persistent and not narrowing significantly
+
+### 14. CPI Component Heatmap (`16_cpi_heatmap.png`)
+
+- Color-coded grid (Month × Category) reveals which sectors drive inflation at each point in time
+- **Healthcare (+14.6% YoY, March 2025):** Dominant outlier; driven by government-administered price adjustments
+- **Housing & Utilities (+5.3%):** Energy and rent costs above the 4% policy ceiling
+- **Transport (−4.1%):** Deflation, reflecting global fuel price softening
+- **Overall CPI (3.1%):** Remains within the government's 4.5% ceiling for 2025
+- The heatmap clearly shows the 2022–2023 broad-based inflation episode (red across rows) vs. the more concentrated 2024–2025 pattern (red only in healthcare/housing)
+
+### 15. Province Bubble Chart (`17_province_bubble.png`)
+
+- **X-axis (log scale):** Population density (persons/km²)
+- **Y-axis:** Urban population share (%)
+- **Bubble size:** Total population
+- **Color:** Geographic region
+- Clear clustering: Red River Delta provinces (blue) concentrate in the high-density zone; Central Highlands (brown) in low-density/low-urban; South East (red) — HCMC, Binh Duong — in high-density/high-urban quadrant
+- **Binh Duong** stands out: high urbanisation (~80%) despite moderate density — reflects industrial park growth without a megacity core
+- **Mekong Delta** (green) provinces: relatively high density but low urbanisation — predominantly agricultural
+
+### 16. Economic Summary Dashboard (`18_dashboard.png`)
+
+One-page overview combining all key indicators:
+
+| Indicator | Latest value |
+|-----------|-------------|
+| GDP (2024) | 11,512T VND ≈ $476B USD |
+| Real GDP growth | 7.1%/year |
+| Exports (2024) | $403B USD |
+| Trade balance (2024) | +$24B USD |
+| CPI inflation (Mar 2025) | 3.1% YoY |
+| Employment (2024-Q4) | 52.1M persons |
+| Unemployment (2024-Q4) | 1.65% |
+| Population (2024) | 101.3M persons |
+| Urban share (2024) | 38.5% |
+
+---
+
 ## Charts Generated
 
 | File | Content |
@@ -125,6 +193,12 @@
 | `output/10_cpi.png` | Overall CPI & YoY inflation; component breakdown (2020–2025) |
 | `output/11_labor.png` | Employment level, unemployment rate, wages, gender wage gap (2011–2024) |
 | `output/12_gdp_vs_population.png` | GDP growth vs population growth scatter & time series (2005–2024) |
+| `output/13_gdp_growth_annotated.png` | GDP growth rate with historical event annotations & era shading |
+| `output/14_export_structure.png` | Export commodity breakdown: stacked bar (2010–2024) + pie (2024) |
+| `output/15_labor_gender.png` | Labor force, unemployment rate, and wages by gender (quarterly) |
+| `output/16_cpi_heatmap.png` | CPI heatmap: YoY% by component × month (2021–2025) |
+| `output/17_province_bubble.png` | Province bubble chart: density × urbanisation × population size |
+| `output/18_dashboard.png` | One-page economic & demographic summary dashboard |
 
 ---
 
