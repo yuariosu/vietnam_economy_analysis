@@ -490,3 +490,12 @@ if __name__ == "__main__":
     e030307  = analyze_e030307()
 
     print_summary(e0202, e0201, e0208, e030307)
+
+    # ── Extended economic analysis (SDMX archive) ──────────────────────────
+    db_path = os.path.join(os.path.dirname(__file__), "extracted_database.json")
+    if os.path.exists(db_path):
+        from analyze_economic import run_economic_analysis
+        run_economic_analysis(e0202_result=e0202)
+    else:
+        print("\n[SKIP] extracted_database.json not found – run: "
+              "curl -L -o all_data_gso.json.zip <url> && unzip all_data_gso.json.zip")
