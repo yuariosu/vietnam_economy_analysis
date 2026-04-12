@@ -1,0 +1,81 @@
+name: Update Vietnam Economy Data
+
+on:
+  schedule:
+    # Run monthly on the 1st at 02:00 UTC
+    - cron: "0 2 1 * *"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Force re-download even if already up-to-date"
+        required: false
+        default: "false"
+        type: boolean
+      regen:
+        description: "Regenerate charts after update"
+        required: false
+        default: "true"
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install matplotlib numpy
+
+      - name: Check for new SDMX release
+        id: check
+        run: |
+          python3 update_data.py --check 2>&1 | tee update_check.log
+          cat update_check.log
+
+      - name: Download updated data (if available)
+        if: ${{ github.event.inputs.force == 'true' }}
+        run: python3 update_data.py --force
+
+      - name: Download updated data (normal)
+        if: ${{ github.event.inputs.force != 'true' }}
+        run: python3 update_data.py
+
+      - name: Regenerate charts
+        if: ${{ github.event.inputs.regen != 'false' }}
+        run: python3 analyze.py
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet extracted_database.json .data_meta.json output/ || echo "has_changes=true" >> "$GITHUB_OUTPUT"
+
+      - name: Commit and push updated data
+        if: steps.changes.outputs.has_changes == 'true'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add extracted_database.json .data_meta.json output/
+          # Stage new charts if output/ didn't exist before
+          git add -A output/ || true
+          RELEASE_TAG=$(python3 -c "import json; m=json.load(open('.data_meta.json')); print(m.get('sdmx_tag','unknown'))")
+          git commit -m "chore: update SDMX data to ${RELEASE_TAG}
+
+Automated monthly data refresh via GitHub Actions.
+Source: thanhqtran/gso-macro-monitor ${RELEASE_TAG}"
+          git push origin HEAD
+
+      - name: No changes detected
+        if: steps.changes.outputs.has_changes != 'true'
+        run: echo "Data is already up-to-date. No commit needed."

@@ -202,16 +202,73 @@ One-page overview combining all key indicators:
 
 ---
 
+## Data Freshness & Update Mechanism
+
+### Current Status
+
+| Dataset | Source | Latest Data | Last Downloaded | Status |
+|---------|--------|-------------|-----------------|--------|
+| SDMX archive (`extracted_database.json`) | [gso-macro-monitor](https://github.com/thanhqtran/gso-macro-monitor) v1.2.0 | 2025-Q2 | 2025-06-06 | ~10 months stale (Apr 2026) |
+| E02.01–E02.08 (population JSON-stat) | GSO PxWeb (manual) | 2024 | 2025-07-23 | ~9 months stale |
+
+### Why Data Is Not Continuously Updated
+
+- **GSO PxWeb API** (`pxweb.gso.gov.vn`) returns HTTP 403 / timeout — not publicly accessible via API
+- **NSO NSDP SDMX endpoint** also returns 403
+- **gso-macro-monitor** (the data archive) is updated by a third-party maintainer; the most recent release is v1.2.0 (2025-06-06)
+
+### Automated Update: GitHub Actions
+
+A scheduled workflow (`.github/workflows/update_data.yml`) runs on the **1st of every month at 02:00 UTC**:
+
+1. Calls the GitHub API to check for a new `gso-macro-monitor` release
+2. If a newer release exists, downloads and extracts `extracted_database.json`
+3. Regenerates all 18 charts via `analyze.py`
+4. Commits and pushes any changed files automatically
+
+You can also trigger it manually via **Actions → Update Vietnam Economy Data → Run workflow** with optional flags:
+- `force = true` — re-download even if the tag matches
+- `regen = false` — skip chart regeneration
+
+### Manual Update: E02.xx Population Files
+
+The E02.xx JSON-stat files cannot be fetched automatically. To update them:
+
+1. Visit **[GSO PxWeb](https://www.gso.gov.vn/en/px-web/)** or **[NSO PxWeb](https://www.nso.gov.vn/en/px-web/)**
+2. Navigate to **Chapter 2 — Population**
+3. Download each table as **JSON-stat** format
+4. Replace the files in this repository:
+   - `E02.01.json` — Area, population, density by province
+   - `E02.02.json` — National avg population by sex & residence
+   - `E02.03-07.json` — Province avg population by sex & residence
+   - `E02.08.json` — Sex ratio by residence
+5. Re-run `python3 analyze.py` to regenerate charts
+
+### Checking Data Freshness Locally
+
+```bash
+# Check current data status (no download)
+python3 update_data.py --check
+
+# Check and update if a new release is available
+python3 update_data.py
+
+# Force re-download and regenerate charts
+python3 update_data.py --force --regen
+```
+
+Metadata about the last downloaded release is stored in `.data_meta.json`.
+
+---
+
 ## How to Run
 
 ```bash
 # Install dependencies
 pip install matplotlib numpy
 
-# Download extended economic data (one-time)
-curl -L -o all_data_gso.json.zip \
-  https://github.com/thanhqtran/gso-macro-monitor/releases/download/v1.2.0/all_data_gso_20250606.json.zip
-unzip all_data_gso.json.zip
+# Check for and download latest SDMX data
+python3 update_data.py
 
 # Run full analysis (population + economy)
 python3 analyze.py
